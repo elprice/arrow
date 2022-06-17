@@ -1,6 +1,6 @@
 -- This is a module for drawing an arrow towards a mob object. Will need Images/ with Arrow pngs to function
 
-local arrowprim = 'arrowprim'
+local arrow_prim = 'arrow_prim'
 local math = require('math')
 local texts = require('texts')
 
@@ -58,7 +58,7 @@ local function arrow_prim_path(arrow_angle, distance) -- picks the correct sprit
 end
 
 local function update_arrow_texture(filepath)
-    windower.prim.set_texture(arrowprim, filepath) -- set arrow image
+    windower.prim.set_texture(arrow_prim, filepath) -- set arrow image
 end
 
 local function update_text_box(name, distance)
@@ -72,43 +72,43 @@ local function update_text_box(name, distance)
 end
 
 function arrow.show()
-    windower.prim.set_visibility(arrowprim, true)
+    windower.prim.set_visibility(arrow_prim, true)
     text_box:visible(true)
 end
 
 function arrow.hide()
-    windower.prim.set_visibility(arrowprim, false)
+    windower.prim.set_visibility(arrow_prim, false)
     text_box:visible(false)
 end
 
 function arrow.init()
-    windower.prim.create(arrowprim)
-    windower.prim.set_fit_to_texture(arrowprim, true)    
-    windower.prim.set_position(arrowprim, arrow_x_pos, arrow_y_pos) 
+    windower.prim.create(arrow_prim)
+    windower.prim.set_fit_to_texture(arrow_prim, true)    
+    windower.prim.set_position(arrow_prim, arrow_x_pos, arrow_y_pos) 
     text_box:pos(arrow_x_pos, arrow_y_pos + ARROW_IMAGE_HEIGHT + TEXT_BOX_MARGIN_TOP)
     arrow.hide()
 end
 
 function arrow.destroy()
-    windower.prim.delete(arrowprim)
+    windower.prim.delete(arrow_prim)
     texts.destroy(text_box)
 end
 
-function arrow.update(mob) -- feel free to rewrite this to take an x,y instead of a mob object
+function arrow.update(target_name,target_x,target_y)
 
     local pos_angle, cam_angle, arr_angle, dist
     local me = windower.ffxi.get_mob_by_target('me')
     local cam = windower.get_camera()
 
     local cam_angle = camera_angle(cam.orientation_x, cam.orientation_z)
-    local pos_angle = position_angle(me.x, me.y, mob.x, mob.y)
+    local pos_angle = position_angle(me.x, me.y, target_x, target_y)
     local arr_angle = arrow_angle(cam_angle, pos_angle)
 
-    local dist = distance(me.x, me.y, mob.x, mob.y)
+    local dist = distance(me.x, me.y, target_x, target_y)
     local sprite_path = arrow_prim_path(arr_angle, dist)
 
     update_arrow_texture(sprite_path)
-    update_text_box(mob.name, dist)
+    update_text_box(target_name, dist)
 
     arrow.show()
 end

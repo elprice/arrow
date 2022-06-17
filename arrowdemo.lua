@@ -23,7 +23,7 @@ function command_helper(cmd, ...)
 
         local mob = windower.ffxi.get_mob_by_name(mob_name)
         while mob and not stop do
-            arrowmodule.update(mob)
+            arrowmodule.update(mob.name,mob.x,mob.y)
             mob = windower.ffxi.get_mob_by_name(mob_name)
             coroutine.sleep(0.2)
         end   
