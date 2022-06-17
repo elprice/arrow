@@ -14,13 +14,14 @@ function command_helper(cmd, ...)
     local args = L{...}
 
     if cmd == 'pointat' then
-
         mob_name = list.concat(args, ' ')
         if mob_name == '' then
             windower.add_to_chat(chatmode, 'ArrowDemo :: No mob name provided. Not running.')
             return
         end
-
+        
+        stop = false
+        
         local mob = windower.ffxi.get_mob_by_name(mob_name)
         while mob and not stop do
             arrowmodule.update(mob.name,mob.x,mob.y)
